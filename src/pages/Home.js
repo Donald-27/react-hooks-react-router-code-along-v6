@@ -1,31 +1,26 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import UserCard from "../components/UserCard";
 
 function Home() {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
-  useEffect(() =>{
-    fetch("http://localhost:4000/users")
-      .then(r => r.json())
-      .then(data => setUsers(data))
-      .catch(error => console.error(error));
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(res => res.json())
+      .then(setUsers);
   }, []);
-  
-  const userList = users.map(user =>{
-    return <UserCard key={user.id} user={user}/>
-  });
 
   return (
-    <>
-      <header>
-        {/* place NavBar here */}
-      </header>
-      <main>
-        <h1>Home!</h1>
-        {userList}
-      </main>
-    </>
+    <div>
+      <h1>User Directory</h1>
+      {users.map(user => (
+        <Link to={`/users/${user.id}`} key={user.id}>
+          <UserCard user={user} />
+        </Link>
+      ))}
+    </div>
   );
-};
+}
 
 export default Home;
